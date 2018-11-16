@@ -8,7 +8,6 @@ public class ClientDemo {
 
     public static void main(String args[]) {
             try {
-
                 while (true) {
                     Socket socket = new Socket("127.0.0.1", 8000);
                     socket.getOutputStream().write((new Date()+":hello world 张琦").getBytes());
