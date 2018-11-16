@@ -10,13 +10,13 @@ import java.net.Socket;
 public class ServerDemo {
 
     public static void main(String[] args) throws Exception {
-        ServerSocket serverSocket = new ServerSocket(8000);
+
         new Thread(()->{
             while (true) {
                 try {
+                    ServerSocket serverSocket = new ServerSocket(8000);
                     Socket socket=serverSocket.accept();
                     new Thread(()->{
-                        System.out.println("创建了");
                         int len;
                         byte[] data = new byte[1024];
                         try {
