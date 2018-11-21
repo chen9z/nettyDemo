@@ -10,11 +10,10 @@ import java.net.Socket;
 public class ServerDemo {
 
     public static void main(String[] args) throws Exception {
-
+        ServerSocket serverSocket = new ServerSocket(8001);
         new Thread(()->{
             while (true) {
                 try {
-                    ServerSocket serverSocket = new ServerSocket(8000);
                     Socket socket=serverSocket.accept();
                     new Thread(()->{
                         int len;
