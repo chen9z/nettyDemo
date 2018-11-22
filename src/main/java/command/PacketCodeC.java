@@ -34,7 +34,12 @@ public class PacketCodeC {
         ByteBuf byteBuf=ByteBufAllocator.DEFAULT.ioBuffer();
         byteBuf.writeByte(MAGIC_NUMBER);
         byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlogrithm());
+        byteBuf.writeByte(packet.getCommond());
 
+        //将对象转换为bytes拼接到bytebuf中
+        byte[] serializer = Serializer.DEFAULT.serializer(packet);
+        byteBuf.writeInt(serializer.length);
+        byteBuf.writeBytes(serializer);
         return byteBuf;
     }
 }
