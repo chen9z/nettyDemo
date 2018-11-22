@@ -33,6 +33,8 @@ public class PacketCodeC {
     public ByteBuf encode(Packet packet) {
         ByteBuf byteBuf=ByteBufAllocator.DEFAULT.ioBuffer();
         byteBuf.writeByte(MAGIC_NUMBER);
+        byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlogrithm());
+
         return byteBuf;
     }
 }
