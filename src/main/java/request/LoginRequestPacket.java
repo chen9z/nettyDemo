@@ -1,6 +1,8 @@
-package command;
+package request;
 
+import command.Command;
 import lombok.Data;
+import command.Packet;
 
 /**
  * Created by chen on 2018/11/21.

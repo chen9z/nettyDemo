@@ -1,3 +1,4 @@
+import handler.ClientHandler;
 import handler.FirstClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -18,7 +19,7 @@ public class ClientNettyDemo {
                 .handler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel channel) throws Exception {
-                        channel.pipeline().addLast(new FirstClientHandler());
+                        channel.pipeline().addLast(new ClientHandler());
                     }
                 });
         bindPort(bootstrap,"127.0.0.1",8000);
