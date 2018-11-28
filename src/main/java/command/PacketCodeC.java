@@ -3,9 +3,10 @@ package command;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import request.LoginRequestPacket;
-import response.LoginResponsePack;
+import request.MessageRequestPacket;
+import response.LoginResponsePacket;
+import response.MessageResponsePacket;
 import serialize.Serializer;
-import serialize.SerializerAlogrithm;
 import serialize.iml.JSONSerializer;
 
 import java.util.HashMap;
@@ -28,14 +29,15 @@ public class PacketCodeC {
     static {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(Command.LOGIN_REQUEST, LoginRequestPacket.class);
-        packetTypeMap.put(Command.LOGIN_RESPONSE, LoginResponsePack.class);
+        packetTypeMap.put(Command.LOGIN_RESPONSE, LoginResponsePacket.class);
+        packetTypeMap.put(Command.MESSAGE_REQUEST, MessageRequestPacket.class);
+        packetTypeMap.put(Command.MESSAGE_RESPONSE, MessageResponsePacket.class);
 
         serializerMap = new HashMap<>();
         serializerMap.put(Serializer.DEFAULT.getSerializerAlogrithm(), new JSONSerializer());
     }
 
-    public ByteBuf encode(ByteBufAllocator byteBufAllocator,Packet packet) {
-        ByteBuf byteBuf=byteBufAllocator.ioBuffer();
+    public ByteBuf encode(ByteBuf byteBuf,Packet packet) {
         byteBuf.writeInt(MAGIC_NUMBER);
         byteBuf.writeByte(packet.getVersion());
         byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlogrithm());
