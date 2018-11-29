@@ -4,7 +4,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import request.LoginRequestPacket;
 import response.LoginResponsePacket;
-import util.LoginUtils;
+import response.Session;
+import util.SessionUtils;
 
 /**
  * Created by chen on 2018/11/28.
@@ -17,18 +18,18 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         LoginResponsePacket response = new LoginResponsePacket();
         if (vaild(loginRequestPacket)) {
             response.setSuccess(true);
-            LoginUtils.markAsLogin(channelHandlerContext.channel());
-            response.setMsg("登陆成功！张琦是个死胖子 from server");
+            SessionUtils.markAsLogin(channelHandlerContext.channel());
+            Session session = new Session(SessionUtils.randomUserId(), loginRequestPacket.getUserName());
+            SessionUtils.bindSession(session,channelHandlerContext.channel());
+            response.setMsg("登陆成功!欢迎你，"+loginRequestPacket.getUserName());
         } else {
             response.setSuccess(false);
-            response.setMsg("登录失败！死胖子是张琦 from server");
-
-
+            response.setMsg("登录失败！用户名或密码错误");
         }
         channelHandlerContext.channel().writeAndFlush(response);
     }
 
     private boolean vaild(LoginRequestPacket packet) {
-        return "zq".equals(packet.getUserName()) && "zq438".equals(packet.getPassword());
+        return "123456".equals(packet.getPassword());
     }
 }

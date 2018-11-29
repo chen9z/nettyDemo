@@ -14,6 +14,26 @@ public class LoginResponsePacket extends Packet {
 
     private String msg;
 
+    private String userName;
+
+    private String userId;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public Byte getCommond() {
         return Command.LOGIN_RESPONSE;

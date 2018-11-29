@@ -1,6 +1,5 @@
 package client;
 
-import client.handler.FirstClientHandler;
 import client.handler.LoginResponseHandler;
 import client.handler.MessageResponseHandler;
 import codec.PacketDecoder;
@@ -12,8 +11,9 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import request.LoginRequestPacket;
 import request.MessageRequestPacket;
-import util.LoginUtils;
+import util.SessionUtils;
 
 import java.util.Scanner;
 
@@ -53,19 +53,24 @@ public class ClientNettyDemo {
     }
 
     private static void startConsoleThread(Channel channel) {
+        Scanner scanner = new Scanner(System.in);
         new Thread(()->{
             while (!Thread.interrupted()) {
-                if (LoginUtils.hasLogin(channel)) {
+                if (SessionUtils.hasLogin(channel)) {
                     System.out.println("输入消息发送至服务器：");
-                    Scanner scanner = new Scanner(System.in);
                     String line=scanner.nextLine();
+                    MessageRequestPacket packet = new MessageRequestPacket();
+                    packet.setRequestMessage(line);
+                    channel.writeAndFlush(packet);
+                }else {
+                    System.out.println("请输入用户名：");
+                    LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
 
+                    String inputUserName = scanner.nextLine();
+                    loginRequestPacket.setUserName(inputUserName);
+                    loginRequestPacket.setPassword("123456");
 
-//                    for (int i = 0; i < 1000; i++) {
-                        MessageRequestPacket packet = new MessageRequestPacket();
-                        packet.setRequestMessage(line);
-                        channel.writeAndFlush(packet);
-//                    }
+                    channel.writeAndFlush(loginRequestPacket);
                 }
             }
         }).start();
