@@ -2,11 +2,13 @@ package server;
 
 import codec.PacketDecoder;
 import codec.PacketEncoder;
+import command.Spliter;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import server.hanlder.AutoHandler;
 import server.hanlder.LoginRequestHandler;
 import server.hanlder.MessageRequestHandler;
 
@@ -24,8 +26,10 @@ public class ServerNettyDemo {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
+                        nioSocketChannel.pipeline().addLast(new Spliter());
                         nioSocketChannel.pipeline().addLast(new PacketDecoder());
                         nioSocketChannel.pipeline().addLast(new LoginRequestHandler());
+                        nioSocketChannel.pipeline().addLast(new AutoHandler());
                         nioSocketChannel.pipeline().addLast(new MessageRequestHandler());
                         nioSocketChannel.pipeline().addLast(new PacketEncoder());
                     }

@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import request.LoginRequestPacket;
 import response.LoginResponsePacket;
+import util.LoginUtils;
 
 /**
  * Created by chen on 2018/11/28.
@@ -16,10 +17,13 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         LoginResponsePacket response = new LoginResponsePacket();
         if (vaild(loginRequestPacket)) {
             response.setSuccess(true);
+            LoginUtils.markAsLogin(channelHandlerContext.channel());
             response.setMsg("登陆成功！张琦是个死胖子 from server");
         } else {
             response.setSuccess(false);
             response.setMsg("登录失败！死胖子是张琦 from server");
+
+
         }
         channelHandlerContext.channel().writeAndFlush(response);
     }

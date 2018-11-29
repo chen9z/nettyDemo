@@ -1,9 +1,11 @@
 package client;
 
+import client.handler.FirstClientHandler;
 import client.handler.LoginResponseHandler;
 import client.handler.MessageResponseHandler;
 import codec.PacketDecoder;
 import codec.PacketEncoder;
+import command.Spliter;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -28,6 +30,7 @@ public class ClientNettyDemo {
                 .handler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel channel) throws Exception {
+                        channel.pipeline().addLast(new Spliter());
                         channel.pipeline().addLast(new PacketDecoder());
                         channel.pipeline().addLast(new LoginResponseHandler());
                         channel.pipeline().addLast(new MessageResponseHandler());
@@ -57,9 +60,12 @@ public class ClientNettyDemo {
                     Scanner scanner = new Scanner(System.in);
                     String line=scanner.nextLine();
 
-                    MessageRequestPacket packet = new MessageRequestPacket();
-                    packet.setRequestMessage(line);
-                    channel.writeAndFlush(packet);
+
+//                    for (int i = 0; i < 1000; i++) {
+                        MessageRequestPacket packet = new MessageRequestPacket();
+                        packet.setRequestMessage(line);
+                        channel.writeAndFlush(packet);
+//                    }
                 }
             }
         }).start();
