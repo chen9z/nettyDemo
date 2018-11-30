@@ -62,8 +62,7 @@ public class ClientNettyDemo {
             while (!Thread.interrupted()) {
                 if (SessionUtils.hasLogin(channel)) {
                     System.out.println("输入消息发送至服务器：");
-                    String message=scanner.nextLine();
-                    System.out.println("请输入聊天用户Id");
+                    String message=scanner.next();
                     String toUserId=scanner.next();
 
                     MessageRequestPacket packet = new MessageRequestPacket();

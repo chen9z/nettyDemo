@@ -12,6 +12,8 @@ import java.util.Date;
 public class MessageResponseHandler extends SimpleChannelInboundHandler<MessageResponsePacket> {
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageResponsePacket messageResponsePacket) throws Exception {
-        System.out.println(new Date() + "[" + messageResponsePacket.getFromUserName() + "]:" + messageResponsePacket.getResponseMessage());
+        String fromUserId = messageResponsePacket.getFromUserId();
+        String fromUserName = messageResponsePacket.getFromUserName();
+        System.out.println(new Date() + "[" + fromUserName + "]:["+fromUserId+"]->" + messageResponsePacket.getResponseMessage());
     }
 }

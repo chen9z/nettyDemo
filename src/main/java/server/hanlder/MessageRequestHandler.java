@@ -19,17 +19,17 @@ public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRe
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageRequestPacket messageRequestPacket) throws Exception {
 
         MessageResponsePacket messageResponsePacket=new MessageResponsePacket();
-        System.out.println("服务端收到了消息:" + messageRequestPacket.getRequestMessage());
+        System.out.println("服务端收到了消息:" + messageRequestPacket.toString());
         Channel responseChannel = SessionUtils.getChannel(messageRequestPacket.getToUserId());
 
-        if (responseChannel == null || SessionUtils.hasLogin(responseChannel)) {
+        if (responseChannel == null || !SessionUtils.hasLogin(responseChannel)) {
             messageResponsePacket.setResponseMessage("用户不在线，发送失败");
         }else {
-            Session session = responseChannel.attr(Attributes.SESSION).get();
+            Session session = SessionUtils.getSession(channelHandlerContext.channel());
+            messageResponsePacket.setFromUserId(session.getUserId());
             messageResponsePacket.setFromUserName(session.getUserName());
-            messageResponsePacket.setFromUserName(messageRequestPacket.getFromUserId());
-            responseChannel.writeAndFlush(messageRequestPacket);
+            messageResponsePacket.setResponseMessage(messageRequestPacket.getRequestMessage());
+            responseChannel.writeAndFlush(messageResponsePacket);
         }
-        channelHandlerContext.channel().writeAndFlush(messageResponsePacket);
     }
 }
