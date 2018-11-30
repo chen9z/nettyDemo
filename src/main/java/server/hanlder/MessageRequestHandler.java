@@ -1,6 +1,5 @@
 package server.hanlder;
 
-import attribute.Attributes;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -8,8 +7,6 @@ import request.MessageRequestPacket;
 import response.MessageResponsePacket;
 import response.Session;
 import util.SessionUtils;
-
-import java.util.Date;
 
 /**
  * Created by chen on 2018/11/28.
