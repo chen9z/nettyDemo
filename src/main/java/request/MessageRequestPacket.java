@@ -2,10 +2,12 @@ package request;
 
 import command.Command;
 import command.Packet;
+import lombok.Data;
 
 /**
  * Created by chen on 2018/11/28.
  */
+@Data
 public class MessageRequestPacket extends Packet {
     @Override
     public Byte getCommond() {
@@ -14,11 +16,7 @@ public class MessageRequestPacket extends Packet {
 
     private String requestMessage;
 
-    public String getRequestMessage() {
-        return requestMessage;
-    }
+    private String toUserId;
 
-    public void setRequestMessage(String requestMessage) {
-        this.requestMessage = requestMessage;
-    }
+    private String fromUserId;
 }

@@ -13,7 +13,7 @@ import java.util.UUID;
  */
 public class SessionUtils {
 
-    private static final Map<String, Session> channelMap = new HashMap<>();
+    private static final Map<String, Channel> channelMap = new HashMap<>();
     public static boolean hasLogin(Channel channel) {
         Boolean b = channel.attr(Attributes.LOGIN).get();
         return channel.attr(Attributes.SESSION).get()!=null;
@@ -24,7 +24,7 @@ public class SessionUtils {
     }
 
     public static void bindSession(Session session, Channel channel) {
-        channelMap.put(session.getUserId(), session);
+        channelMap.put(session.getUserId(), channel);
         channel.attr(Attributes.SESSION).set(session);
 
     }
@@ -36,5 +36,13 @@ public class SessionUtils {
 
     public static String randomUserId() {
         return UUID.randomUUID().toString().split("-")[0];
+    }
+
+    public static Channel getChannel(String toUserId) {
+        return channelMap.get(toUserId);
+    }
+
+    public static Session getSession(Channel channel) {
+        return channel.attr(Attributes.SESSION).get();
     }
 }

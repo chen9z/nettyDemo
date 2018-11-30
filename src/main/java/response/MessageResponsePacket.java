@@ -2,10 +2,12 @@ package response;
 
 import command.Command;
 import command.Packet;
+import lombok.Data;
 
 /**
  * Created by chen on 2018/11/28.
  */
+@Data
 public class MessageResponsePacket extends Packet {
     @Override
     public Byte getCommond() {
@@ -14,11 +16,8 @@ public class MessageResponsePacket extends Packet {
 
     private String responseMessage;
 
-    public String getResponseMessage() {
-        return responseMessage;
-    }
+    private String fromUserId;
 
-    public void setResponseMessage(String responseMessage) {
-        this.responseMessage = responseMessage;
-    }
+    private String fromUserName;
+
 }

@@ -9,6 +9,7 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import request.LoginRequestPacket;
@@ -27,6 +28,9 @@ public class ClientNettyDemo {
         NioEventLoopGroup group = new NioEventLoopGroup();
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
+                .option(ChannelOption.SO_KEEPALIVE,true)
+                .option(ChannelOption.TCP_NODELAY,true)
                 .handler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel channel) throws Exception {
@@ -58,21 +62,35 @@ public class ClientNettyDemo {
             while (!Thread.interrupted()) {
                 if (SessionUtils.hasLogin(channel)) {
                     System.out.println("输入消息发送至服务器：");
-                    String line=scanner.nextLine();
+                    String message=scanner.nextLine();
+                    System.out.println("请输入聊天用户Id");
+                    String toUserId=scanner.next();
+
                     MessageRequestPacket packet = new MessageRequestPacket();
-                    packet.setRequestMessage(line);
+                    packet.setToUserId(toUserId);
+                    packet.setFromUserId(SessionUtils.getSession(channel).getUserId());
+                    packet.setRequestMessage(message);
                     channel.writeAndFlush(packet);
                 }else {
                     System.out.println("请输入用户名：");
-                    LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+                    if (scanner.hasNext()) {
+                        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+                        String inputUserName = scanner.nextLine();
+                        loginRequestPacket.setUserName(inputUserName);
+                        loginRequestPacket.setPassword("123456");
+                        channel.writeAndFlush(loginRequestPacket);
+                        waitForLoginResponse();
+                    }
 
-                    String inputUserName = scanner.nextLine();
-                    loginRequestPacket.setUserName(inputUserName);
-                    loginRequestPacket.setPassword("123456");
-
-                    channel.writeAndFlush(loginRequestPacket);
                 }
             }
         }).start();
+    }
+
+    private static void waitForLoginResponse() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ignored) {
+        }
     }
 }

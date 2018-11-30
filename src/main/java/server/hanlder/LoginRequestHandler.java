@@ -16,12 +16,18 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, LoginRequestPacket loginRequestPacket) throws Exception {
 
         LoginResponsePacket response = new LoginResponsePacket();
+        System.out.println(loginRequestPacket.toString());
         if (vaild(loginRequestPacket)) {
             response.setSuccess(true);
             SessionUtils.markAsLogin(channelHandlerContext.channel());
-            Session session = new Session(SessionUtils.randomUserId(), loginRequestPacket.getUserName());
+
+            String userId=SessionUtils.randomUserId();
+            Session session = new Session(userId, loginRequestPacket.getUserName());
+
             SessionUtils.bindSession(session,channelHandlerContext.channel());
-            response.setMsg("登陆成功!欢迎你，"+loginRequestPacket.getUserName());
+            response.setUserId(userId);
+            response.setUserName(loginRequestPacket.getUserName());
+            response.setMsg("欢迎你!"+loginRequestPacket.getUserName());
         } else {
             response.setSuccess(false);
             response.setMsg("登录失败！用户名或密码错误");
