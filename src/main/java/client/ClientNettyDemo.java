@@ -1,6 +1,10 @@
 package client;
 
+import client.console.ConsoleCommanManager;
+import client.console.LoginCommand;
+import server.hanlder.CreateGroupResponseHandler;
 import client.handler.LoginResponseHandler;
+import client.handler.LogoutResponseHandler;
 import client.handler.MessageResponseHandler;
 import codec.PacketDecoder;
 import codec.PacketEncoder;
@@ -12,8 +16,6 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import request.LoginRequestPacket;
-import request.MessageRequestPacket;
 import util.SessionUtils;
 
 import java.util.Scanner;
@@ -37,6 +39,8 @@ public class ClientNettyDemo {
                         channel.pipeline().addLast(new Spliter());
                         channel.pipeline().addLast(new PacketDecoder());
                         channel.pipeline().addLast(new LoginResponseHandler());
+                        channel.pipeline().addLast(new LogoutResponseHandler());
+                        channel.pipeline().addLast(new CreateGroupResponseHandler());
                         channel.pipeline().addLast(new MessageResponseHandler());
                         channel.pipeline().addLast(new PacketEncoder());
                     }
@@ -56,40 +60,20 @@ public class ClientNettyDemo {
         });
     }
 
+
     private static void startConsoleThread(Channel channel) {
         Scanner scanner = new Scanner(System.in);
+        LoginCommand loginCommand = new LoginCommand();
+        ConsoleCommanManager consoleCommanManager = new ConsoleCommanManager();
         new Thread(()->{
             while (!Thread.interrupted()) {
                 if (SessionUtils.hasLogin(channel)) {
-                    System.out.println("输入消息发送至服务器：");
-                    String message=scanner.next();
-                    String toUserId=scanner.next();
-
-                    MessageRequestPacket packet = new MessageRequestPacket();
-                    packet.setToUserId(toUserId);
-                    packet.setFromUserId(SessionUtils.getSession(channel).getUserId());
-                    packet.setRequestMessage(message);
-                    channel.writeAndFlush(packet);
-                }else {
-                    System.out.println("请输入用户名：");
-                    if (scanner.hasNext()) {
-                        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
-                        String inputUserName = scanner.nextLine();
-                        loginRequestPacket.setUserName(inputUserName);
-                        loginRequestPacket.setPassword("123456");
-                        channel.writeAndFlush(loginRequestPacket);
-                        waitForLoginResponse();
-                    }
-
+                    consoleCommanManager.exce(scanner,channel);
+                } else {
+                    loginCommand.exce(scanner,channel);
                 }
             }
         }).start();
     }
 
-    private static void waitForLoginResponse() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ignored) {
-        }
-    }
 }

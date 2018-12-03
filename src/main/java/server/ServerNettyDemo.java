@@ -10,6 +10,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import server.hanlder.AutoHandler;
+import server.hanlder.CreateGroupResponseHandler;
 import server.hanlder.LoginRequestHandler;
 import server.hanlder.MessageRequestHandler;
 
@@ -34,6 +35,7 @@ public class ServerNettyDemo {
                         nioSocketChannel.pipeline().addLast(new PacketDecoder());
                         nioSocketChannel.pipeline().addLast(new LoginRequestHandler());
                         nioSocketChannel.pipeline().addLast(new AutoHandler());
+                        nioSocketChannel.pipeline().addLast(new CreateGroupResponseHandler());
                         nioSocketChannel.pipeline().addLast(new MessageRequestHandler());
                         nioSocketChannel.pipeline().addLast(new PacketEncoder());
                     }
