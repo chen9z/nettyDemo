@@ -16,7 +16,7 @@ public class CreateGroupCommand implements ConsoleCommand {
 
         System.out.println("请输入用户id,逗号分开");
 
-        String next = scanner.next();
+        String next = scanner.nextLine();
         String[] userArray = next.split(",");
 
         CreateGroupRequestPacket requestPacket = new CreateGroupRequestPacket();

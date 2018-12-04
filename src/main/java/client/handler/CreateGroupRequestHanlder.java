@@ -35,9 +35,9 @@ public class CreateGroupRequestHanlder extends SimpleChannelInboundHandler<Creat
         responsePacket.setGroupId(SessionUtils.randomUserId());
         responsePacket.setMessage("群组创建成功");
         responsePacket.setSuccess(true);
-        System.out.println("群组里面有" + userIdList.toString());
+        System.out.println("群组里面有" + userNameList.toString());
 
-        channelGroup.write(responsePacket);
+        channelGroup.writeAndFlush(responsePacket);
 
     }
 }

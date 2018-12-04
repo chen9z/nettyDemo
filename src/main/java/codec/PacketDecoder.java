@@ -1,5 +1,6 @@
 package codec;
 
+import command.Packet;
 import command.PacketCodeC;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -14,6 +15,8 @@ public class PacketDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
 
-        list.add(PacketCodeC.INSTANCE.decode(byteBuf));
+        Packet decode = PacketCodeC.INSTANCE.decode(byteBuf);
+        if(decode!=null) list.add(decode);
+
     }
 }

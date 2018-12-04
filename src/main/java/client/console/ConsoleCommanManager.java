@@ -18,16 +18,16 @@ public class ConsoleCommanManager implements ConsoleCommand {
         consoleCommandMap.put("send2User", new Send2UserCommand());
         consoleCommandMap.put("logout", new LogoutCommand());
         consoleCommandMap.put("createGroup", new CreateGroupCommand());
-        consoleCommandMap.put("login", new LoginCommand());
     }
     @Override
     public void exce(Scanner scanner, Channel channel) {
-        String next = scanner.next();
+        String next = scanner.nextLine();
         if (consoleCommandMap.get(next) != null) {
-            ((CreateGroupCommand) consoleCommandMap.get(next)).exce(scanner, channel);
+            consoleCommandMap.get(next).exce(scanner, channel);
         }else {
             System.out.println("无法识别[" + next + "]指令");
         }
+
 
     }
 

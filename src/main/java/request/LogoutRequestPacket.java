@@ -12,6 +12,6 @@ public class LogoutRequestPacket extends Packet {
     private String userId;
     @Override
     public Byte getCommond() {
-        return Command.LOGIN_REQUEST;
+        return Command.LOGOUT_REQUEST;
     }
 }

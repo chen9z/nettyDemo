@@ -1,5 +1,6 @@
 package server;
 
+import client.handler.CreateGroupRequestHanlder;
 import codec.PacketDecoder;
 import codec.PacketEncoder;
 import command.Spliter;
@@ -9,10 +10,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import server.hanlder.AutoHandler;
-import server.hanlder.CreateGroupResponseHandler;
-import server.hanlder.LoginRequestHandler;
-import server.hanlder.MessageRequestHandler;
+import server.hanlder.*;
 
 /**
  * Created by chen on 2018/11/19.
@@ -31,12 +29,14 @@ public class ServerNettyDemo {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
+                        nioSocketChannel.pipeline().addLast(new CheckStateHandler());
                         nioSocketChannel.pipeline().addLast(new Spliter());
                         nioSocketChannel.pipeline().addLast(new PacketDecoder());
                         nioSocketChannel.pipeline().addLast(new LoginRequestHandler());
                         nioSocketChannel.pipeline().addLast(new AutoHandler());
-                        nioSocketChannel.pipeline().addLast(new CreateGroupResponseHandler());
+                        nioSocketChannel.pipeline().addLast(new CreateGroupRequestHanlder());
                         nioSocketChannel.pipeline().addLast(new MessageRequestHandler());
+                        nioSocketChannel.pipeline().addLast(new LogoutRequestHandler());
                         nioSocketChannel.pipeline().addLast(new PacketEncoder());
                     }
                 }).bind(8000);
