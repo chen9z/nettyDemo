@@ -4,8 +4,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import response.CreateGroupResponsePacket;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * Created by chen on 2018/12/3.
  */
