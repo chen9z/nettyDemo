@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class MessageResponsePacket extends Packet {
     @Override
-    public Byte getCommond() {
+    public Byte getCommand() {
         return Command.MESSAGE_RESPONSE;
     }
 

@@ -11,7 +11,7 @@ public abstract class Packet {
     private Byte version=1;
 
 
-    public abstract Byte getCommond();
+    public abstract Byte getCommand();
 
 }
 

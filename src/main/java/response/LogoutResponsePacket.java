@@ -11,7 +11,7 @@ import lombok.Data;
 public class LogoutResponsePacket extends Packet {
     private boolean success;
     @Override
-    public Byte getCommond() {
+    public Byte getCommand() {
         return Command.LOGOUT_RESPONSE;
     }
 

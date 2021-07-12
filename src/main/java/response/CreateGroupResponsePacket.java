@@ -13,7 +13,7 @@ public class CreateGroupResponsePacket extends Packet {
     private boolean success;
     private String message;
     @Override
-    public Byte getCommond() {
+    public Byte getCommand() {
         return Command.CREATE_GROUP_RESPONSE;
     }
 }

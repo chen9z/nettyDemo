@@ -35,7 +35,7 @@ public class LoginResponsePacket extends Packet {
     }
 
     @Override
-    public Byte getCommond() {
+    public Byte getCommand() {
         return Command.LOGIN_RESPONSE;
     }
 

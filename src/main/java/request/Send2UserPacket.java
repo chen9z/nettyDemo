@@ -8,7 +8,7 @@ import command.Packet;
  */
 public class Send2UserPacket extends Packet {
     @Override
-    public Byte getCommond() {
+    public Byte getCommand() {
         return Command.LOGOUT_REQUEST;
     }
 }
